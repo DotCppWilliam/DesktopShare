@@ -1,0 +1,6 @@
+<RCC>
+    <qresource prefix="/DesktopShare">
+        <file>res/voice-on.png</file>
+        <file>res/pause.png</file>
+    </qresource>
+</RCC>

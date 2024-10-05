@@ -1,0 +1,113 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>qml;cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="Header Files">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hh;hpp;hxx;hm;inl;inc;xsd</Extensions>
+    </Filter>
+    <Filter Include="Resource Files">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>qrc;rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+    <Filter Include="Form Files">
+      <UniqueIdentifier>{99349809-55BA-4b9d-BF79-8FDBB0286EB3}</UniqueIdentifier>
+      <Extensions>ui</Extensions>
+    </Filter>
+    <Filter Include="Translation Files">
+      <UniqueIdentifier>{639EADAA-A684-42e4-A9AD-28FC9BCB8F7C}</UniqueIdentifier>
+      <Extensions>ts</Extensions>
+    </Filter>
+    <Filter Include="capture">
+      <UniqueIdentifier>{9207990b-839f-4186-a58d-5576bcc9736e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="capture\audio">
+      <UniqueIdentifier>{ea3fdbde-6730-40f9-af65-8a958e9d6e19}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="shader">
+      <UniqueIdentifier>{0e9d1e6f-b2a2-4a32-8d1f-cbba77dddc62}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="capture\video">
+      <UniqueIdentifier>{357742ac-9c33-4415-8a2d-c7e34940dd86}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="net">
+      <UniqueIdentifier>{4b39b125-db68-46a1-8815-fc5dc6daaa59}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="rtmp">
+      <UniqueIdentifier>{50076d28-aca9-463b-b444-53c821aaeffe}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="rtsp">
+      <UniqueIdentifier>{1af84d50-3193-4f2e-b9c3-9586bf16f548}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <QtRcc Include="desktop_share.qrc">
+      <Filter>Resource Files</Filter>
+    </QtRcc>
+    <QtMoc Include="desktop_share.h">
+      <Filter>Header Files</Filter>
+    </QtMoc>
+    <ClCompile Include="desktop_share.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="main.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="opengl_screen_paint.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="wasapi_capture_speaker.cpp">
+      <Filter>capture\audio</Filter>
+    </ClCompile>
+    <ClCompile Include="monitor_info.cpp">
+      <Filter>capture\video</Filter>
+    </ClCompile>
+    <ClCompile Include="wasiapi_capture_microphone.cpp">
+      <Filter>capture\audio</Filter>
+    </ClCompile>
+    <ClCompile Include="clickable_label.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="error_handle.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="wasapi_capture_speaker.h">
+      <Filter>capture\audio</Filter>
+    </ClInclude>
+    <ClInclude Include="monitor_info.h">
+      <Filter>capture\video</Filter>
+    </ClInclude>
+    <ClInclude Include="wasiapi_capture_microphone.h">
+      <Filter>capture\audio</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <QtMoc Include="opengl_screen_paint.h">
+      <Filter>Header Files</Filter>
+    </QtMoc>
+    <QtMoc Include="clickable_label.h">
+      <Filter>Header Files</Filter>
+    </QtMoc>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="vertex.glsl">
+      <Filter>shader</Filter>
+    </None>
+    <None Include="fragment.glsl">
+      <Filter>shader</Filter>
+    </None>
+    <None Include="cpp.hint" />
+  </ItemGroup>
+  <ItemGroup>
+    <QtUic Include="desktop_share.ui">
+      <Filter>Form Files</Filter>
+    </QtUic>
+  </ItemGroup>
+</Project>

@@ -1,0 +1,7 @@
+*.bmp
+*.jpg
+.vs
+lib
+x64
+*.user
+*.wav
