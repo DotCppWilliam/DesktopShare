@@ -2,5 +2,9 @@
     <qresource prefix="/DesktopShare">
         <file>res/voice-on.png</file>
         <file>res/pause.png</file>
+        <file>res/audio.png</file>
+        <file>res/live.png</file>
+        <file>res/record.png</file>
+        <file>res/video.png</file>
     </qresource>
 </RCC>

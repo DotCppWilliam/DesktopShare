@@ -48,7 +48,9 @@
   <Target Name="QtMsBuildNotFound" BeforeTargets="CustomBuild;ClCompile" Condition="!Exists('$(QtMsBuild)\qt.targets') or !Exists('$(QtMsBuild)\qt.props')">
     <Message Importance="High" Text="QtMsBuild: could not locate qt.targets, qt.props; project may not build correctly." />
   </Target>
-  <ImportGroup Label="ExtensionSettings" />
+  <ImportGroup Label="ExtensionSettings">
+    <Import Project="$(VCTargetsPath)\BuildCustomizations\CUDA 12.6.props" />
+  </ImportGroup>
   <ImportGroup Label="Shared" />
   <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
@@ -60,14 +62,19 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'">
-    <LibraryPath>G:\Projects\DesktopShare\lib;$(LibraryPath)</LibraryPath>
+    <LibraryPath>.\ffmpeg\lib;.\lib;$(LibraryPath)</LibraryPath>
+    <ReferencePath>.\codec\audio_codec\;.\codec\video_codec\;.\codec\video_codec\nvenc\;.\codec\video_codec\nvenc\nvenc_decoder\;.\codec\video_codec\nvenc\nvenc_encoder\;.\codec\video_codec\qsv\;.\codec\video_codec\qsv\bits\;.\codec\video_codec\qsv\include\;.\codec\video_codec\qsv\src\;.\libyuv\include;.\libyuv\include\libyuv;.\opengl\;$(ReferencePath)</ReferencePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x64'">
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <Link>
-      <AdditionalDependencies>OpenGL32.Lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>OpenGL32.Lib;avcodec.lib;avdevice.lib;avfilter.lib;avformat.lib;avutil.lib;libavcodec.lib;libavdevice.lib;libavfilter.lib;libavformat.lib;libavutil.lib;libpostproc.lib;libswresample.lib;libswscale.lib;postproc.lib;swresample.lib;swscale.lib;cuda.lib;nvcuvid.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalOptions>/ignore:4099 %(AdditionalOptions)</AdditionalOptions>
     </Link>
+    <ClCompile>
+      <AdditionalIncludeDirectories>$(ProjectDir)ffmpeg;$(ProjectDir)src\codec;$(ProjectDir)src\codec\video_codec;$(ProjectDir)src\codec\audio_codec;$(ProjectDir)src\codec\video_codec\nvenc;$(ProjectDir)src\codec\video_codec\nvenc\nvenc_decoder\;$(ProjectDir)src\codec\video_codec\nvenc\nvenc_encoder\;$(ProjectDir)src\codec\video_codec\nvenc\Utils;$(ProjectDir)src\codec\video_codec\qsv;$(ProjectDir)src\codec\video_codec\qsv\bits\;$(ProjectDir)src\codec\video_codec\qsv\include\;$(ProjectDir)src\codec\video_codec\qsv\src\;$(ProjectDir)src\capture\video\;$(ProjectDir)src\capture\audio\;$(ProjectDir)ibyuv\;$(ProjectDir)libyuv\include\;$(ProjectDir)libyuv\include\libyuv\;$(ProjectDir)libyuv\source;$(ProjectDir)src\inc\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ClCompile>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'" Label="Configuration">
     <ClCompile>
@@ -98,34 +105,193 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="clickable_label.cpp" />
-    <ClCompile Include="monitor_info.cpp" />
-    <ClCompile Include="opengl_screen_paint.cpp" />
-    <ClCompile Include="wasapi_capture_speaker.cpp" />
-    <ClCompile Include="wasiapi_capture_microphone.cpp" />
+    <ClCompile Include=".\src\codec\audio_codec\aac_encoder.cpp" />
+    <ClCompile Include=".\src\clickable_label.cpp" />
+    <ClCompile Include=".\src\clickable_widget.cpp" />
+    <ClCompile Include=".\src\codec\video_codec\h264_encoder.cpp" />
+    <ClCompile Include=".\src\capture\video\monitor_info.cpp" />
+    <ClCompile Include=".\src\opengl_screen_paint.cpp" />
+    <ClCompile Include=".\src\codec\audio_codec\audio_resampler.cpp" />
+    <ClCompile Include=".\src\settings.cpp" />
+    <ClCompile Include=".\src\codec\video_codec\video_resampler.cpp" />
+    <ClCompile Include=".\src\capture\audio\wasapi_capture_speaker.cpp" />
+    <ClCompile Include=".\src\capture\audio\wasiapi_capture_microphone.cpp" />
+    <ClCompile Include=".\src\codec\video_codec\qsv\common_directx11.cpp" />
+    <ClCompile Include=".\src\codec\video_codec\qsv\common_directx9.cpp" />
+    <ClCompile Include=".\src\codec\video_codec\qsv\common_utils.cpp" />
+    <ClCompile Include=".\src\codec\video_codec\qsv\common_utils_windows.cpp" />
+    <ClCompile Include=".\src\codec\video_codec\qsv\src\mfx_critical_section.cpp" />
+    <ClCompile Include=".\src\codec\video_codec\qsv\src\mfx_dispatcher.cpp" />
+    <ClCompile Include=".\src\codec\video_codec\qsv\src\mfx_dispatcher_log.cpp" />
+    <ClCompile Include=".\src\codec\video_codec\qsv\src\mfx_dxva2_device.cpp" />
+    <ClCompile Include=".\src\codec\video_codec\qsv\src\mfx_function_table.cpp" />
+    <ClCompile Include=".\src\codec\video_codec\qsv\src\mfx_library_iterator.cpp" />
+    <ClCompile Include=".\src\codec\video_codec\qsv\src\mfx_load_dll.cpp" />
+    <ClCompile Include=".\src\codec\video_codec\qsv\src\mfx_load_plugin.cpp" />
+    <ClCompile Include=".\src\codec\video_codec\qsv\src\mfx_plugin_hive.cpp" />
+    <ClCompile Include=".\src\codec\video_codec\qsv\src\mfx_win_reg_key.cpp" />
+    <ClCompile Include=".\src\codec\video_codec\qsv\src\qsv_main.cpp" />
+    <ClCompile Include="libyuv\source\compare.cc" />
+    <ClCompile Include="libyuv\source\compare_common.cc" />
+    <ClCompile Include="libyuv\source\compare_gcc.cc" />
+    <ClCompile Include="libyuv\source\compare_mmi.cc" />
+    <ClCompile Include="libyuv\source\compare_msa.cc" />
+    <ClCompile Include="libyuv\source\compare_neon.cc" />
+    <ClCompile Include="libyuv\source\compare_neon64.cc" />
+    <ClCompile Include="libyuv\source\compare_win.cc" />
+    <ClCompile Include="libyuv\source\convert.cc" />
+    <ClCompile Include="libyuv\source\convert_argb.cc" />
+    <ClCompile Include="libyuv\source\convert_from.cc" />
+    <ClCompile Include="libyuv\source\convert_from_argb.cc" />
+    <ClCompile Include="libyuv\source\convert_jpeg.cc" />
+    <ClCompile Include="libyuv\source\convert_to_argb.cc" />
+    <ClCompile Include="libyuv\source\convert_to_i420.cc" />
+    <ClCompile Include="libyuv\source\cpu_id.cc" />
+    <ClCompile Include="libyuv\source\mjpeg_decoder.cc" />
+    <ClCompile Include="libyuv\source\mjpeg_validate.cc" />
+    <ClCompile Include="libyuv\source\planar_functions.cc" />
+    <ClCompile Include="libyuv\source\rotate.cc" />
+    <ClCompile Include="libyuv\source\rotate_any.cc" />
+    <ClCompile Include="libyuv\source\rotate_argb.cc" />
+    <ClCompile Include="libyuv\source\rotate_common.cc" />
+    <ClCompile Include="libyuv\source\rotate_gcc.cc" />
+    <ClCompile Include="libyuv\source\rotate_mmi.cc" />
+    <ClCompile Include="libyuv\source\rotate_msa.cc" />
+    <ClCompile Include="libyuv\source\rotate_neon.cc" />
+    <ClCompile Include="libyuv\source\rotate_neon64.cc" />
+    <ClCompile Include="libyuv\source\rotate_win.cc" />
+    <ClCompile Include="libyuv\source\row_any.cc" />
+    <ClCompile Include="libyuv\source\row_common.cc" />
+    <ClCompile Include="libyuv\source\row_gcc.cc" />
+    <ClCompile Include="libyuv\source\row_mmi.cc" />
+    <ClCompile Include="libyuv\source\row_msa.cc" />
+    <ClCompile Include="libyuv\source\row_neon.cc" />
+    <ClCompile Include="libyuv\source\row_neon64.cc" />
+    <ClCompile Include="libyuv\source\row_win.cc" />
+    <ClCompile Include="libyuv\source\scale.cc" />
+    <ClCompile Include="libyuv\source\scale_any.cc" />
+    <ClCompile Include="libyuv\source\scale_argb.cc" />
+    <ClCompile Include="libyuv\source\scale_common.cc" />
+    <ClCompile Include="libyuv\source\scale_gcc.cc" />
+    <ClCompile Include="libyuv\source\scale_mmi.cc" />
+    <ClCompile Include="libyuv\source\scale_msa.cc" />
+    <ClCompile Include="libyuv\source\scale_neon.cc" />
+    <ClCompile Include="libyuv\source\scale_neon64.cc" />
+    <ClCompile Include="libyuv\source\scale_win.cc" />
+    <ClCompile Include="libyuv\source\video_common.cc" />
+    <ClCompile Include="src\codec\video_codec\nvenc\nvenc.cpp" />
+    <ClCompile Include="src\codec\video_codec\nvenc\nvenc_decoder\NvDecoder.cpp" />
+    <ClCompile Include="src\codec\video_codec\nvenc\nvenc_encoder\NvEncoder.cpp" />
+    <ClCompile Include="src\codec\video_codec\nvenc\nvenc_encoder\NvEncoderCuda.cpp" />
+    <ClCompile Include="src\codec\video_codec\nvenc\nvenc_encoder\NvEncoderD3D11.cpp" />
+    <ClCompile Include="src\codec\video_codec\nvenc\nvenc_encoder\NvEncoderD3D9.cpp" />
+    <ClCompile Include="src\codec\video_codec\nvenc\nvenc_encoder\NvEncoderGL.cpp" />
     <QtRcc Include="desktop_share.qrc" />
     <QtUic Include="desktop_share.ui" />
-    <QtMoc Include="desktop_share.h" />
-    <ClCompile Include="desktop_share.cpp" />
-    <ClCompile Include="main.cpp" />
+    <QtMoc Include=".\src\inc\desktop_share.h" />
+    <ClCompile Include=".\src\desktop_share.cpp" />
+    <ClCompile Include=".\src\main.cpp" />
+    <QtUic Include="settings.ui" />
   </ItemGroup>
   <ItemGroup>
-    <QtMoc Include="clickable_label.h" />
-    <ClInclude Include="error_handle.h" />
-    <ClInclude Include="monitor_info.h" />
-    <ClInclude Include="wasapi_capture_speaker.h" />
-    <ClInclude Include="wasiapi_capture_microphone.h" />
-    <QtMoc Include="opengl_screen_paint.h" />
+    <ClInclude Include=".\src\codec\video_codec\qsv\bits\linux_defs.h" />
+    <ClInclude Include=".\src\codec\video_codec\qsv\bits\windows_defs.h" />
+    <ClInclude Include=".\src\codec\video_codec\qsv\common_directx11.h" />
+    <ClInclude Include=".\src\codec\video_codec\qsv\common_directx9.h" />
+    <ClInclude Include=".\src\codec\video_codec\qsv\common_utils.h" />
+    <ClInclude Include=".\src\codec\video_codec\qsv\include\mfxastructures.h" />
+    <ClInclude Include=".\src\codec\video_codec\qsv\include\mfxaudio++.h" />
+    <ClInclude Include=".\src\codec\video_codec\qsv\include\mfxaudio.h" />
+    <ClInclude Include=".\src\codec\video_codec\qsv\include\mfxbrc.h" />
+    <ClInclude Include=".\src\codec\video_codec\qsv\include\mfxcamera.h" />
+    <ClInclude Include=".\src\codec\video_codec\qsv\include\mfxcommon.h" />
+    <ClInclude Include=".\src\codec\video_codec\qsv\include\mfxdefs.h" />
+    <ClInclude Include=".\src\codec\video_codec\qsv\include\mfxenc.h" />
+    <ClInclude Include=".\src\codec\video_codec\qsv\include\mfxjpeg.h" />
+    <ClInclude Include=".\src\codec\video_codec\qsv\include\mfxla.h" />
+    <ClInclude Include=".\src\codec\video_codec\qsv\include\mfxmvc.h" />
+    <ClInclude Include=".\src\codec\video_codec\qsv\include\mfxpak.h" />
+    <ClInclude Include=".\src\codec\video_codec\qsv\include\mfxplugin++.h" />
+    <ClInclude Include=".\src\codec\video_codec\qsv\include\mfxplugin.h" />
+    <ClInclude Include=".\src\codec\video_codec\qsv\include\mfxsession.h" />
+    <ClInclude Include=".\src\codec\video_codec\qsv\include\mfxstructures.h" />
+    <ClInclude Include=".\src\codec\video_codec\qsv\include\mfxvideo++.h" />
+    <ClInclude Include=".\src\codec\video_codec\qsv\include\mfxvideo.h" />
+    <ClInclude Include=".\src\codec\video_codec\qsv\include\mfxvp8.h" />
+    <ClInclude Include=".\src\codec\video_codec\qsv\include\mfxvp9.h" />
+    <ClInclude Include=".\src\codec\video_codec\qsv\include\mfxvstructures.h" />
+    <ClInclude Include=".\src\codec\video_codec\qsv\QsvEncoder.h" />
+    <ClInclude Include=".\src\codec\video_codec\qsv\src\mfxaudio_exposed_functions_list.h" />
+    <ClInclude Include=".\src\codec\video_codec\qsv\src\mfx_critical_section.h" />
+    <ClInclude Include=".\src\codec\video_codec\qsv\src\mfx_dispatcher.h" />
+    <ClInclude Include=".\src\codec\video_codec\qsv\src\mfx_dispatcher_defs.h" />
+    <ClInclude Include=".\src\codec\video_codec\qsv\src\mfx_dispatcher_log.h" />
+    <ClInclude Include=".\src\codec\video_codec\qsv\src\mfx_dxva2_device.h" />
+    <ClInclude Include=".\src\codec\video_codec\qsv\src\mfx_exposed_functions_list.h" />
+    <ClInclude Include=".\src\codec\video_codec\qsv\src\mfx_library_iterator.h" />
+    <ClInclude Include=".\src\codec\video_codec\qsv\src\mfx_load_dll.h" />
+    <ClInclude Include=".\src\codec\video_codec\qsv\src\mfx_load_plugin.h" />
+    <ClInclude Include=".\src\codec\video_codec\qsv\src\mfx_plugin_hive.h" />
+    <ClInclude Include=".\src\codec\video_codec\qsv\src\mfx_vector.h" />
+    <ClInclude Include=".\src\codec\video_codec\qsv\src\mfx_win_reg_key.h" />
+    <ClInclude Include="libyuv\include\libyuv.h" />
+    <ClInclude Include="libyuv\include\libyuv\basic_types.h" />
+    <ClInclude Include="libyuv\include\libyuv\compare.h" />
+    <ClInclude Include="libyuv\include\libyuv\compare_row.h" />
+    <ClInclude Include="libyuv\include\libyuv\convert.h" />
+    <ClInclude Include="libyuv\include\libyuv\convert_argb.h" />
+    <ClInclude Include="libyuv\include\libyuv\convert_from.h" />
+    <ClInclude Include="libyuv\include\libyuv\convert_from_argb.h" />
+    <ClInclude Include="libyuv\include\libyuv\cpu_id.h" />
+    <ClInclude Include="libyuv\include\libyuv\macros_msa.h" />
+    <ClInclude Include="libyuv\include\libyuv\mjpeg_decoder.h" />
+    <ClInclude Include="libyuv\include\libyuv\planar_functions.h" />
+    <ClInclude Include="libyuv\include\libyuv\rotate.h" />
+    <ClInclude Include="libyuv\include\libyuv\rotate_argb.h" />
+    <ClInclude Include="libyuv\include\libyuv\rotate_row.h" />
+    <ClInclude Include="libyuv\include\libyuv\row.h" />
+    <ClInclude Include="libyuv\include\libyuv\scale.h" />
+    <ClInclude Include="libyuv\include\libyuv\scale_argb.h" />
+    <ClInclude Include="libyuv\include\libyuv\scale_row.h" />
+    <ClInclude Include="libyuv\include\libyuv\version.h" />
+    <ClInclude Include="libyuv\include\libyuv\video_common.h" />
+    <ClInclude Include="src\codec\video_codec\nvenc\encoder_info.h" />
+    <ClInclude Include="src\codec\video_codec\nvenc\nvenc.h" />
+    <ClInclude Include="src\codec\video_codec\nvenc\nvenc_decoder\cuviddec.h" />
+    <ClInclude Include="src\codec\video_codec\nvenc\nvenc_decoder\nvcuvid.h" />
+    <ClInclude Include="src\codec\video_codec\nvenc\nvenc_decoder\NvDecoder.h" />
+    <ClInclude Include="src\codec\video_codec\nvenc\nvenc_encoder\nvEncodeAPI.h" />
+    <ClInclude Include="src\codec\video_codec\nvenc\nvenc_encoder\NvEncoder.h" />
+    <ClInclude Include="src\codec\video_codec\nvenc\nvenc_encoder\NvEncoderCuda.h" />
+    <ClInclude Include="src\codec\video_codec\nvenc\nvenc_encoder\NvEncoderD3D11.h" />
+    <ClInclude Include="src\codec\video_codec\nvenc\nvenc_encoder\NvEncoderD3D9.h" />
+    <ClInclude Include="src\codec\video_codec\nvenc\nvenc_encoder\NvEncoderGL.h" />
+    <QtMoc Include=".\src\inc\clickable_label.h" />
+    <QtMoc Include=".\src\inc\clickable_widget.h" />
+    <ClInclude Include=".\src\codec\audio_codec\aac_encoder.h" />
+    <ClInclude Include=".\src\codec\audio_codec\audio_encoder.h" />
+    <ClInclude Include=".\src\codec\av_common.h" />
+    <ClInclude Include=".\src\inc\error_handle.h" />
+    <ClInclude Include=".\src\codec\video_codec\h264_encoder.h" />
+    <ClInclude Include=".\src\capture\video\monitor_info.h" />
+    <QtMoc Include=".\src\inc\settings.h" />
+    <ClInclude Include=".\src\codec\audio_codec\audio_resampler.h" />
+    <ClInclude Include=".\src\codec\video_codec\video_encoder.h" />
+    <ClInclude Include=".\src\codec\video_codec\video_resampler.h" />
+    <ClInclude Include=".\src\capture\audio\wasapi_capture_speaker.h" />
+    <ClInclude Include=".\src\capture\audio\wasiapi_capture_microphone.h" />
+    <QtMoc Include=".\src\inc\opengl_screen_paint.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="cpp.hint" />
-    <None Include="fragment.glsl" />
-    <None Include="vertex.glsl" />
+    <None Include=".\src\shader\fragment.glsl" />
+    <None Include=".\src\shader\vertex.glsl" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Condition="Exists('$(QtMsBuild)\qt.targets')">
     <Import Project="$(QtMsBuild)\qt.targets" />
   </ImportGroup>
   <ImportGroup Label="ExtensionTargets">
+    <Import Project="$(VCTargetsPath)\BuildCustomizations\CUDA 12.6.targets" />
   </ImportGroup>
 </Project>

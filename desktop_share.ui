@@ -283,22 +283,36 @@ QLabel:hover {
           </widget>
          </item>
          <item>
-          <widget class="ClickableLabel" name="recording_btn">
-           <property name="styleSheet">
-            <string notr="true">QLabel {
+          <layout class="QHBoxLayout" name="horizontalLayout_4">
+           <item>
+            <widget class="ClickableLabel" name="recording_btn">
+             <property name="styleSheet">
+              <string notr="true">QLabel {
 	background: #3c404b;
 }
 QLabel:hover {
     background-color: #4f535e;    /* 鼠标悬停时的背景颜色 */
 }</string>
-           </property>
-           <property name="text">
-            <string>开始录制</string>
-           </property>
-           <property name="alignment">
-            <set>Qt::AlignCenter</set>
-           </property>
-          </widget>
+             </property>
+             <property name="text">
+              <string>开始录制</string>
+             </property>
+             <property name="alignment">
+              <set>Qt::AlignCenter</set>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QLabel" name="recording_pause_label">
+             <property name="text">
+              <string/>
+             </property>
+             <property name="scaledContents">
+              <bool>true</bool>
+             </property>
+            </widget>
+           </item>
+          </layout>
          </item>
          <item>
           <widget class="ClickableLabel" name="setting_btn">
