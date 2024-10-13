@@ -343,6 +343,18 @@
     <ClCompile Include="libyuv\source\video_common.cc">
       <Filter>libyuv\source</Filter>
     </ClCompile>
+    <ClCompile Include=".\src\rtmp\rtmp_chunk.cpp">
+      <Filter>rtmp</Filter>
+    </ClCompile>
+    <ClCompile Include=".\src\rtmp\buffer.cpp">
+      <Filter>rtmp</Filter>
+    </ClCompile>
+    <ClCompile Include=".\src\rtmp\rtmp_handshake.cpp">
+      <Filter>rtmp</Filter>
+    </ClCompile>
+    <ClCompile Include=".\src\net\threadpool.cpp">
+      <Filter>net</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include=".\src\inc\error_handle.h">
@@ -593,6 +605,30 @@
     </ClInclude>
     <ClInclude Include="libyuv\include\libyuv\video_common.h">
       <Filter>libyuv\include\libyuv</Filter>
+    </ClInclude>
+    <ClInclude Include=".\src\rtmp\rtmp_msg.h">
+      <Filter>rtmp</Filter>
+    </ClInclude>
+    <ClInclude Include=".\src\rtmp\rtmp_chunk.h">
+      <Filter>rtmp</Filter>
+    </ClInclude>
+    <ClInclude Include=".\src\rtmp\buffer.h">
+      <Filter>rtmp</Filter>
+    </ClInclude>
+    <ClInclude Include=".\src\rtmp\rtmp_handshake.h">
+      <Filter>rtmp</Filter>
+    </ClInclude>
+    <ClInclude Include=".\src\net\threadpool.h">
+      <Filter>net</Filter>
+    </ClInclude>
+	<ClInclude Include=".\src\net\noncopyable.h">
+      <Filter>net</Filter>
+    </ClInclude>
+	<ClInclude Include=".\src\net\concurrent_queue.h">
+      <Filter>net</Filter>
+    </ClInclude>
+    <ClInclude Include="src\net\concurrent_queue.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
