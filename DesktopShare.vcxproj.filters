@@ -355,6 +355,15 @@
     <ClCompile Include=".\src\net\threadpool.cpp">
       <Filter>net</Filter>
     </ClCompile>
+    <ClCompile Include="src\rtmp\amf_codec.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\rtmp\rtmp_pushstream.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\capture_screen.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include=".\src\inc\error_handle.h">
@@ -621,13 +630,22 @@
     <ClInclude Include=".\src\net\threadpool.h">
       <Filter>net</Filter>
     </ClInclude>
-	<ClInclude Include=".\src\net\noncopyable.h">
+    <ClInclude Include=".\src\net\noncopyable.h">
       <Filter>net</Filter>
     </ClInclude>
-	<ClInclude Include=".\src\net\concurrent_queue.h">
+    <ClInclude Include=".\src\net\concurrent_queue.h">
       <Filter>net</Filter>
     </ClInclude>
-    <ClInclude Include="src\net\concurrent_queue.h">
+    <ClInclude Include="src\rtmp\amf.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\rtmp\amf_codec.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\rtmp\rtmp_pushstream.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\inc\capture_screen.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

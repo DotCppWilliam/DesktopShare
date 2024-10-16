@@ -193,6 +193,7 @@
     <ClCompile Include="libyuv\source\video_common.cc" />
     <ClCompile Include=".\src\rtmp\rtmp_chunk.cpp" />
     <ClCompile Include=".\src\rtmp\rtmp_handshake.cpp" />
+    <ClCompile Include="src\capture_screen.cpp" />
     <ClCompile Include="src\codec\video_codec\nvenc\nvenc.cpp" />
     <ClCompile Include="src\codec\video_codec\nvenc\nvenc_decoder\NvDecoder.cpp" />
     <ClCompile Include="src\codec\video_codec\nvenc\nvenc_encoder\NvEncoder.cpp" />
@@ -201,6 +202,8 @@
     <ClCompile Include="src\codec\video_codec\nvenc\nvenc_encoder\NvEncoderD3D9.cpp" />
     <ClCompile Include="src\codec\video_codec\nvenc\nvenc_encoder\NvEncoderGL.cpp" />
     <ClCompile Include=".\src\net\threadpool.cpp" />
+    <ClCompile Include="src\rtmp\amf_codec.cpp" />
+    <ClCompile Include="src\rtmp\rtmp_pushstream.cpp" />
     <QtRcc Include="desktop_share.qrc" />
     <QtUic Include="desktop_share.ui" />
     <QtMoc Include=".\src\inc\desktop_share.h" />
@@ -287,7 +290,11 @@
     <ClInclude Include="src\codec\video_codec\nvenc\nvenc_encoder\NvEncoderGL.h" />
     <ClInclude Include=".\src\net\threadpool.h" />
     <ClInclude Include=".\src\net\concurrent_queue.h" />
-	<ClInclude Include=".\src\net\noncopyable.h" />
+    <ClInclude Include=".\src\net\noncopyable.h" />
+    <ClInclude Include="src\inc\capture_screen.h" />
+    <ClInclude Include="src\rtmp\amf.h" />
+    <ClInclude Include="src\rtmp\amf_codec.h" />
+    <ClInclude Include="src\rtmp\rtmp_pushstream.h" />
     <QtMoc Include=".\src\inc\clickable_label.h" />
     <QtMoc Include=".\src\inc\clickable_widget.h" />
     <ClInclude Include=".\src\codec\audio_codec\aac_encoder.h" />
