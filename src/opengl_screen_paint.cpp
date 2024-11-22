@@ -35,12 +35,12 @@
 
 ////////////////////////////////////// 静态函数指针
 // wgl扩展函数的函数指针
-static PFNWGLDXOPENDEVICENVPROC wglDXOpenDeviceNV = nullptr;	
-static PFNWGLDXCLOSEDEVICENVPROC wglDXCloseDeviceNV = nullptr;
-static PFNWGLDXREGISTEROBJECTNVPROC wglDXRegisterObjectNV = nullptr;
-static PFNWGLDXUNREGISTEROBJECTNVPROC wglDXUnregisterObjectNV = nullptr;
-static PFNWGLDXLOCKOBJECTSNVPROC wglDXLockObjectsNV = nullptr;
-static PFNWGLDXUNLOCKOBJECTSNVPROC wglDXUnlockObjectsNV = nullptr;
+PFNWGLDXOPENDEVICENVPROC wglDXOpenDeviceNV = nullptr;
+PFNWGLDXCLOSEDEVICENVPROC wglDXCloseDeviceNV = nullptr;
+PFNWGLDXREGISTEROBJECTNVPROC wglDXRegisterObjectNV = nullptr;
+PFNWGLDXUNREGISTEROBJECTNVPROC wglDXUnregisterObjectNV = nullptr;
+PFNWGLDXLOCKOBJECTSNVPROC wglDXLockObjectsNV = nullptr;
+PFNWGLDXUNLOCKOBJECTSNVPROC wglDXUnlockObjectsNV = nullptr;
 
 
 
@@ -109,12 +109,24 @@ void OpenglScreenPaint::initializeGL()
 	initializeOpenGLFunctions();
 	InitD3D11();
 	InitShader();
-	
-	timer_->start(1);
+	timer_->start(10); 
+
+	//std::thread thread([this] {
+	//	std::this_thread::sleep_for(std::chrono::milliseconds(40));
+	//	std::vector<uint8_t> buf;
+	//	buf.resize(this->GetImgSize());
+	//	while (true)
+	//	{
+	//		//this->GetScreenFrameTexture(buf);
+	//	} });
+	//thread.detach();
 }
+
 
 void OpenglScreenPaint::paintGL()
 {
+	wglDXLockObjectsNV(dxgi_device_, 1, &dxgi_texture_);
+	
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	glUseProgram(program_);
 	glBindVertexArray(vao_);
@@ -122,14 +134,50 @@ void OpenglScreenPaint::paintGL()
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 	glDrawArrays(GL_TRIANGLES, 0, 3);
-
+	
 	glUseProgram(0);
 	glBindVertexArray(0);
+	
+	wglDXUnlockObjectsNV(dxgi_device_, 1, &dxgi_texture_);
 }
 
 void OpenglScreenPaint::resizeGL(int w, int h)
 {
 	glViewport(0, 0, w, h);
+}
+
+bool OpenglScreenPaint::GetScreenFrameTexture(std::vector<uint8_t>& data_buf)
+{
+	bool ret = false;
+	if (data_buf.size() == 0 || curr_buf_index_.load(std::memory_order_acquire) == -1)
+		return ret;
+	
+
+	int curr_index = curr_buf_index_.load(std::memory_order_acquire);
+
+
+	std::atomic_flag& flag = curr_index == 0 ? front_buf_flag_ : back_buf_flag_;
+	while (flag.test_and_set(std::memory_order_acquire));
+
+	D3D11_MAPPED_SUBRESOURCE dsec = { 0 };
+	HRESULT hr = d3d11_context_->Map(double_buffer_[curr_index], 0, D3D11_MAP_READ, 0, &dsec);
+	if (SUCCEEDED(hr))
+	{
+		if (dsec.pData)
+		{
+			for (uint32_t y = 0; y < screen_height_; y++)
+			{
+				memcpy(data_buf.data() + y * screen_width_ * 4,
+					(uint8_t*)dsec.pData + y * dsec.RowPitch,
+					screen_width_ * 4);
+			}
+			ret = true;
+		}
+	
+		d3d11_context_->Unmap(double_buffer_[curr_index], 0);
+	}
+	flag.clear(std::memory_order_release);
+	return ret;
 }
 
 
@@ -180,6 +228,7 @@ void OpenglScreenPaint::InitD3D11()
 	screen_width_ = desc.ModeDesc.Width;
 	screen_height_ = desc.ModeDesc.Height;
 
+	img_size_ = screen_width_ * screen_height_ * 4;
 	D3D11_TEXTURE2D_DESC texture_desc = { 0 };
 	texture_desc.Width = screen_width_;
 	texture_desc.Height = screen_height_;
@@ -189,31 +238,31 @@ void OpenglScreenPaint::InitD3D11()
 	texture_desc.BindFlags = 0;
 	texture_desc.SampleDesc = { 1, 0 };
 	texture_desc.Usage = D3D11_USAGE_DEFAULT;
-	//texture_desc.CPUAccessFlags = 0;
-	//texture_desc.MiscFlags = D3D11_RESOURCE_MISC_SHARED_KEYEDMUTEX;  
 	hr = device->CreateTexture2D(&texture_desc, nullptr, &d3d11_texture_);
 
-	// 测试 ==========================
 	texture_desc.Usage = D3D11_USAGE_STAGING;
 	texture_desc.CPUAccessFlags = D3D11_CPU_ACCESS_READ;
 	texture_desc.MiscFlags = 0;
-	hr = device->CreateTexture2D(&texture_desc, nullptr, &rgba_texture_);
-	ASSERT_HR(hr);
+	hr = device->CreateTexture2D(&texture_desc, nullptr, &double_buffer_[0]);
+	hr = device->CreateTexture2D(&texture_desc, nullptr, &double_buffer_[1]);
+
+	//// 测试,用于创建拷贝到内存的纹理 ==========================
+	////texture_desc.Usage = D3D11_USAGE_STAGING;
+	////texture_desc.CPUAccessFlags = D3D11_CPU_ACCESS_READ;
+	////texture_desc.MiscFlags = 0;
+	////hr = device->CreateTexture2D(&texture_desc, nullptr, &rgba_texture_);
+	////ASSERT_HR(hr);
 
 	dxgi_device_ = wglDXOpenDeviceNV(device);
 	assert(dxgi_device_);
 	glGenTextures(1, &opengl_texture_);
-	dxgi_texture_ = wglDXRegisterObjectNV(dxgi_device_, 
-		d3d11_texture_, 
+	dxgi_texture_ = wglDXRegisterObjectNV(dxgi_device_,
+		d3d11_texture_,
 		opengl_texture_,
-		GL_TEXTURE_2D, 
+		GL_TEXTURE_2D,
 		WGL_ACCESS_READ_ONLY_NV);
 	assert(dxgi_texture_);
 
-	BOOL ret = wglDXLockObjectsNV(dxgi_device_, 1, &dxgi_texture_);
-	assert(ret);
-
-	
 	factory->Release();
 	adapter->Release();
 	output->Release();
@@ -307,14 +356,24 @@ bool OpenglScreenPaint::CaptureFrame()
 		hr = resource->QueryInterface(__uuidof(ID3D11Texture2D), (void**)&resource_texture);
 		ASSERT_HR(hr);
 
-		BOOL ok = wglDXUnlockObjectsNV(dxgi_device_, 1, &dxgi_texture_);
-		assert(ok);
-
 		d3d11_context_->CopyResource(d3d11_texture_, resource_texture);
+		
+		{
+			int curr_index = curr_buf_index_.load(std::memory_order_acquire);
+			if (curr_buf_index_ == -1)
+				curr_index = curr_buf_index_ = 0;
+			else
+				curr_buf_index_.store((curr_buf_index_ + 1) % 2, std::memory_order_release);
+			std::atomic_flag& flag = curr_index == 0 ? front_buf_flag_ : back_buf_flag_;
+			while (flag.test_and_set(std::memory_order_acquire));
+			d3d11_context_->CopyResource(double_buffer_[curr_index], resource_texture);
 
-		ok = wglDXLockObjectsNV(dxgi_device_, 1, &dxgi_texture_);
-		assert(ok);
+			D3D11_MAPPED_SUBRESOURCE dsec = { 0 };
+			HRESULT hr = d3d11_context_->Map(double_buffer_[curr_index], 0, D3D11_MAP_READ, 0, &dsec);
 
+			flag.clear(std::memory_order_release);
+		}
+		
 		resource_texture->Release();
 		resource->Release();
 		return true;
@@ -322,32 +381,12 @@ bool OpenglScreenPaint::CaptureFrame()
 	return false;
 }
 
-void OpenglScreenPaint::TextureMapToMemory()
-{
-	HRESULT hr = S_OK;
-	d3d11_context_->CopyResource(rgba_texture_, d3d11_texture_);
-	D3D11_MAPPED_SUBRESOURCE mapped_resource = { 0 };
-	hr = d3d11_context_->Map(rgba_texture_, 0, D3D11_MAP_READ, 0, &mapped_resource);
-	ASSERT_HR(hr);
-}
-
-void OpenglScreenPaint::DrawMouseInfo()
-{
-	
-}
-
-
 
 
 
 ///////////////////////////////////////////////////////////////// 槽函数
 void OpenglScreenPaint::RenderScreenFrameSlot()
 {
-	while (!CaptureFrame());
+	while (CaptureFrame() == false);
 	this->update();
 }
-
-
-
-
-

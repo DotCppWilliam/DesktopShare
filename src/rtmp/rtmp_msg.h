@@ -13,7 +13,14 @@ enum RtmpMsgType
 };
 
 
-
+enum RtmpCsid
+{
+	RTMP_CSID_CONTROL_ID	= 2,
+	RTMP_CSID_INVOAKE_ID	= 3,
+	RTMP_CSID_AUDIO_ID,
+	RTMP_CSID_VIDEO_ID,
+	RTMP_CSID_DATA_ID
+};
 
 // RTMP消息头结构: 时间戳 + 长度 + 
 #pragma pack(1)
@@ -34,7 +41,25 @@ struct RtmpMsgHeader
 
 	uint8_t padding[5];		// 字节对齐,填充
 };
-#pragma pack(0)
+#pragma pack()
+
+
+// 描述RTMP 建立过程中的阶段
+enum RtmpEstablishmentStage
+{
+	RES_SET_CHUNK_SIZE  = 0x01,
+	RES_ABORT_MSG		= 0x02,
+	RES_ACK				= 0x03,
+	RES_USER_EVENT		= 0x04,
+	RES_ACK_SIZE		= 0x05,
+	RES_BANDWIDTH_SIZE	= 0x06,
+	RES_AUDIO			= 0x08,
+	RES_VIDEO			= 0x09,
+	RES_FLEX_MSG		= 0x11,
+	RES_NOTIFY			= 0x12,
+	RES_INVOKE			= 0x14,
+	RES_FLASH_VIDEO		= 0x16
+};
 
 struct RtmpMsg
 {

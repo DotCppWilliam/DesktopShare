@@ -17,6 +17,9 @@ public:
 	void RetrieveAll();
 	void Retrieve(size_t len);
 	void RetrieveUntil(const char* end);
+	void Resize(int size);
+	void ZeroInit();
+	bool Advance(size_t size);
 
 	int ReadableBytes() const;
 	int WritableBytes() const;

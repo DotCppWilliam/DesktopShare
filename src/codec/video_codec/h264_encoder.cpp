@@ -50,16 +50,23 @@ bool H264Encoder::InitLibx264()
 	codec_context_->max_b_frames = 0;
 	codec_context_->pix_fmt = AV_PIX_FMT_YUV420P;
 
+// 设置ABR(平均比特率)
 	codec_context_->bit_rate = cfg_.bitrate_;
-	codec_context_->rc_min_rate = cfg_.bitrate_;
-	codec_context_->rc_max_rate = cfg_.bitrate_;
+	codec_context_->rc_min_rate = cfg_.bitrate_ / 2;
+	codec_context_->rc_max_rate = cfg_.bitrate_ * 1.5;
 	codec_context_->rc_buffer_size = cfg_.bitrate_;
+	av_opt_set(codec_context_->priv_data, "nal-hrd", "abr", 0);
 
 	codec_context_->flags |= AV_CODEC_FLAG_GLOBAL_HEADER;
-	if (codec->id == AV_CODEC_ID_H264)
-		av_opt_set(codec_context_->priv_data, "preset", "ultrafast", 0);
+// 调整编码速度和质量的选项,ultrafast是最快但是质量最差的
+	/*if (codec->id == AV_CODEC_ID_H264)
+		av_opt_set(codec_context_->priv_data, "preset", "faster", 0);*/
+
+// 减少编码的延迟,会禁用掉某些可能引起延迟的特性,如B帧使用
 	av_opt_set(codec_context_->priv_data, "tune", "zerolatency", 0);
+// 是否强制生成IDR帧,设置为1代表生成
 	av_opt_set_int(codec_context_->priv_data, "forced-idr", 1, 0);
+// 设置编码等级, AVC-Intra是无损或近似无损编码格式.  -1表示不使用
 	av_opt_set_int(codec_context_->priv_data, "avcintra-class", -1, 0);
 
 	int ret = 0;
@@ -251,6 +258,13 @@ int H264Encoder::Encode(const uint8_t* frame_data, VideoConfig& video_cfg,
 
 
 	return frame_size;
+}
+
+int H264Encoder::Encode(ID3D11Texture2D* texture, VideoConfig& video_cfg, uint32_t imgs_size, std::vector<uint8_t>& out_frame)
+{
+
+
+	return 0;
 }
 
 int H264Encoder::GetSequenceParams(uint8_t* out_buf, int out_buf_size)

@@ -356,12 +356,42 @@
       <Filter>net</Filter>
     </ClCompile>
     <ClCompile Include="src\rtmp\amf_codec.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>rtmp</Filter>
     </ClCompile>
     <ClCompile Include="src\rtmp\rtmp_pushstream.cpp">
+      <Filter>rtmp</Filter>
+    </ClCompile>
+    <ClCompile Include="src\rtmp\rtmp.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\capture_screen.cpp">
+    <ClCompile Include="src\rtmp\rtmp_connection.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\media\aac_source.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\media\h264_source.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\media\h264_parse.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\net\tcp_connection.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\net\event_loop.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\net\socket_util.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\net\acceptor.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\net\async_socket.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\net\socket.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -637,15 +667,57 @@
       <Filter>net</Filter>
     </ClInclude>
     <ClInclude Include="src\rtmp\amf.h">
-      <Filter>Header Files</Filter>
+      <Filter>rtmp</Filter>
     </ClInclude>
     <ClInclude Include="src\rtmp\amf_codec.h">
-      <Filter>Header Files</Filter>
+      <Filter>rtmp</Filter>
     </ClInclude>
     <ClInclude Include="src\rtmp\rtmp_pushstream.h">
+      <Filter>rtmp</Filter>
+    </ClInclude>
+    <ClInclude Include="src\rtmp\rtmp.h">
+      <Filter>rtmp</Filter>
+    </ClInclude>
+    <ClInclude Include="src\net\channel.h">
+      <Filter>net</Filter>
+    </ClInclude>
+    <ClInclude Include="src\net\timestamp.h">
+      <Filter>net</Filter>
+    </ClInclude>
+    <ClInclude Include="src\rtmp\rtmp_connection.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\inc\capture_screen.h">
+    <ClInclude Include="src\media\media.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\media\aac_source.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\media\h264_source.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\media\h264_parse.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\net\tcp_connection.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\net\event_loop.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\net\socket_util.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\net\acceptor.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\net\socket.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\net\async_socket.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\net\event_type.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

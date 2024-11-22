@@ -99,7 +99,7 @@ int RtmpChunk::ParseChunkHeader(Buffer& buf)
 
 // 类型0独有的stream id
 	if (fmt == RTMP_MSG_TYPE_0)
-		rtmp_msg.stream_id_ = ReadUint24LE((uint8_t*)rtmp_msg.stream_id_);
+		rtmp_msg.stream_id_ = ReadUint24LE((uint8_t*)&rtmp_msg.stream_id_);
 
 // 获取扩展时间戳
 	uint32_t timestamp = ReadUint24BE((uint8_t*)msg_header.timestamp);

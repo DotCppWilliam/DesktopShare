@@ -43,8 +43,7 @@ int VideoResampler::Resample(AVFramePtr in_frame, AVFramePtr out_frame)
 		return -1;
 
 	out_frame.reset(av_frame_alloc(), [](AVFrame* ptr) {
-		av_frame_free(&ptr);
-		});
+		av_frame_free(&ptr); });
 
 	out_frame->width = out_cfg_.width_;
 	out_frame->height = out_cfg_.height_;

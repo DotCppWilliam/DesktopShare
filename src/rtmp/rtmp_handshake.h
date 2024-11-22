@@ -25,17 +25,16 @@
 				×Ü¹²1536×Ö½Ú
 */
 
-
+enum State
+{
+	HANDSHAKE_C0C1,
+	HANDSHAKE_S0S1S2,
+	HANDSHAKE_C2,
+	HANDSHAKE_COMPLETE
+};
 
 class RtmpHandshake
 {
-	enum State
-	{
-		HANDSHAKE_C0C1,
-		HANDSHAKE_S0S1S2,
-		HANDSHAKE_C2,
-		HANDSHAKE_COMPLETE
-	};
 public:
 	RtmpHandshake(State state);
 	~RtmpHandshake();
@@ -43,6 +42,8 @@ public:
 	int Parse(Buffer& in_buf, char* out_buf, uint32_t out_buf_size);
 	int BuildC0C1(char* buf, uint32_t buf_size);
 	bool IsCompleted() const;
+	State GetHandshakeState()
+	{ return handshake_state_; }
 private:
 	State handshake_state_;
 };

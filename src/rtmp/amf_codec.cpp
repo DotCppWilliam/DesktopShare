@@ -46,7 +46,7 @@ int AMFDecoder::Decode(const char* data, int size, int cnt)
 		default: break;
 		}
 
-		if (bytes_used < 0())
+		if (bytes_used < 0)
 			break;
 
 		bytes_used += ret;
@@ -78,16 +78,6 @@ double AMFDecoder::GetDoubleNum() const
 bool AMFDecoder::HasObject(std::string key) const
 {
 	return amf_objs_.find(key) != amf_objs_.end();
-}
-
-AMFObject AMFDecoder::GetObject(std::string key)
-{
-	return amf_objs_[key];
-}
-
-AMFObject AMFDecoder::GetObject()
-{
-	return amf_obj_;
 }
 
 AMFObjects& AMFDecoder::GetObjects()
@@ -162,7 +152,7 @@ int AMFDecoder::DecodeObject(const char* data, int size, AMFObjects& amf_objects
 			break;
 
 		// ±£´æamf object
-		amf_objects.emplace(key, decoder.GetObject());
+		amf_objects.emplace(key, decoder.GetAMFObject());
 	}
 
 	return bytes_used;
@@ -280,7 +270,7 @@ void AMFEncoder::EncodeObjects(AMFObjects& objs)
 			EncodeDoubleNumber(it.second.amf_number_);
 			break;
 		case AMF_STRING:
-			EncodeString(it.second.amf_str_.c_str(), (int)it.second.amf_str_.size());
+			EncodeString(it.second.amf_str_.c_str(), (int)it.second.amf_str_.size(), true);
 			break;
 		case AMF_BOOLEAN:
 			EncodeBoolean(it.second.amf_bool_);
@@ -324,12 +314,37 @@ void AMFEncoder::EncodeECMA(AMFObjects& objs)
 	EncodeInt8(AMF0_OBJECT_END);
 }
 
+void AMFEncoder::EncodeECMA(std::vector<AMFProperty>& ecma_array)
+{
+	EncodeInt8(AMF0_ECMA_ARRAY);
+	EncodeInt32(ecma_array.size());
+
+	for (auto& it : ecma_array)
+	{
+		EncodeString(it.key.second.c_str(), it.key.second.size(), false);
+		switch (it.val_type)
+		{
+		case AMF_NUMBER:
+			EncodeDoubleNumber((double)*it.val.get());
+			break;
+		case AMF_BOOLEAN:
+			EncodeBoolean((int)*it.val.get());
+			break;
+		case AMF_STRING:
+			EncodeString(it.val.get(), it.val_size, false);
+			break;
+		}
+	}
+	EncodeString("", 0, false);
+	EncodeInt8(AMF0_OBJECT_END);
+}
+
 void AMFEncoder::EncodeInt8(int8_t val)
 {
 	if ((size_ - index_) < 1)
 		Realloc(size_ + 1024);
 
-	data_.get()[index_] = val;
+	data_.get()[index_++] = val;
 }
 
 void AMFEncoder::EncodeInt16(int8_t val)

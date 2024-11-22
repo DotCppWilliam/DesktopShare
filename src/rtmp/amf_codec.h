@@ -8,7 +8,7 @@
 struct AMFObject
 {
 	AMFObject() = default;
-	AMFObject(std::string& str)
+	AMFObject(std::string str)
 	{
 		type_ = AMF_STRING;
 		amf_str_ = str;
@@ -50,8 +50,14 @@ public:
 	std::string GetString() const;
 	double GetDoubleNum() const;
 	bool HasObject(std::string key) const;
-	AMFObject GetObject(std::string key);
-	AMFObject GetObject();
+	AMFObject GetAMFObject(std::string key)
+	{
+		return amf_objs_[key];
+	}
+	AMFObject GetAMFObject()
+	{
+		return amf_obj_;
+	}
 	AMFObjects& GetObjects();
 private:
 	static int DecodeBoolean(const char* data, int size, bool& amf_bool);
@@ -67,9 +73,15 @@ private:
 	AMFObjects amf_objs_;
 };
 
+struct AMFProperty
+{
+	std::pair<std::uint32_t, std::string> key;	// key是一个字符串, 长度:字符串内容
 
 
-
+	AMFObjectType val_type;		// 指定value的类型
+	std::shared_ptr<char> val;	// 存储value的值
+	std::size_t val_size;		// 如果value是string类型,那么记录长度
+};
 
 class AMFEncoder
 {
@@ -86,6 +98,7 @@ public:
 	void EncodeBoolean(int val);
 	void EncodeObjects(AMFObjects& objs);
 	void EncodeECMA(AMFObjects& objs);
+	void EncodeECMA(std::vector<AMFProperty>& ecma_array);
 private:
 	void EncodeInt8(int8_t val);
 	void EncodeInt16(int8_t val);

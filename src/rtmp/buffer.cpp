@@ -62,6 +62,25 @@ void Buffer::RetrieveUntil(const char* end)
 	Retrieve(ReadBegin() - end);
 }
 
+void Buffer::Resize(int size)
+{
+	buffer_.resize(size);
+}
+
+
+void Buffer::ZeroInit()
+{
+	memset(buffer_.data(), 0, buffer_.size());
+}
+
+bool Buffer::Advance(size_t size)
+{
+	if ((buffer_.size() - writer_index_) < size)
+		return false;
+	writer_index_ += size;
+	return true;
+}
+
 int Buffer::ReadableBytes() const
 {
 	return writer_index_ - reader_index_;
