@@ -1,0 +1,11 @@
+avutil.dll filter=lfs diff=lfs merge=lfs -text
+postproc.dll filter=lfs diff=lfs merge=lfs -text
+swresample.dll filter=lfs diff=lfs merge=lfs -text
+swscale.dll filter=lfs diff=lfs merge=lfs -text
+avcodec.dll filter=lfs diff=lfs merge=lfs -text
+avdevice.dll filter=lfs diff=lfs merge=lfs -text
+avfilter.dll filter=lfs diff=lfs merge=lfs -text
+avformat.dll filter=lfs diff=lfs merge=lfs -text
+lib/OpenGL32.Lib filter=lfs diff=lfs merge=lfs -text
+lib/cuda.lib filter=lfs diff=lfs merge=lfs -text
+lib/nvcuvid.lib filter=lfs diff=lfs merge=lfs -text
